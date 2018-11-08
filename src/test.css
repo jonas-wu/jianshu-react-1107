@@ -1,0 +1,12 @@
+.container {
+  border: 1px solid #000;
+  overflow: hidden;
+}
+
+p{
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: pink;
+  margin: 100px;
+}

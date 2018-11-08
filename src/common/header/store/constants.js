@@ -1,0 +1,6 @@
+export const SEARCH_INPUT_FOCUS = 'header/SEARCH_INPUT_FOCUS'
+export const SEARCH_INPUT_BLUR = 'header/SEARCH_INPUT_BLUR'
+export const CHANGE_SEARCH_LIST = 'header/CHANGE_SEARCH_LIST'
+export const MOUNSE_ENTER = 'header/MOUNSE_ENTER'
+export const MOUNSE_LEAVE = 'header/MOUNSE_LEAVE'
+export const CHANGE_PAGE = 'header/CHANGE_PAGE'

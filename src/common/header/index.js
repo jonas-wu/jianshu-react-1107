@@ -7,99 +7,125 @@ import {
   NavSearch,
   Addition,
   Button,
-  SearchWrapper
+  SearchWrapper,
+  SearchInfo,
+  SearchInfoTitle,
+  SearchInfoSwitch,
+  SearchInfoItem
 } from './style'
 import { CSSTransition } from 'react-transition-group'
 import { connect } from 'react-redux'
-import * as actionTypes from '../../store/actionTypes'
+import { actionCreators } from './store'
+import './style.css'
 
-const Header = (props) => {
-  return (
-    <HeaderWrapper>
-      <Logo/>
-      <Nav>
-        <NavItem className='left active'>首页</NavItem>
-        <NavItem className='left'>下载App</NavItem>
-        <SearchWrapper>
-          <CSSTransition
-            in={props.focused}
-            timeout={200}
-            classNames='slide'>
-            <NavSearch className={props.focused ? 'focused' : ''}
-              onFocus={props.onInputFocus}
-              onBlur={props.onInputBlur}/>
-          </CSSTransition>            
-          <i className={props.focused ? 'focused iconfont' : 'iconfont'}>&#xe6cf;</i>
-        </SearchWrapper>          
-        <NavItem className='right'>登录</NavItem>
-        <NavItem className='right'>
-          <i className="iconfont">&#xe636;</i>
-        </NavItem>
-      </Nav>
-      <Addition>
-        <Button className='write'>
-          <i className="iconfont">&#xe615;</i>写文章
-        </Button>
-        <Button className='reg'>注册</Button>
-      </Addition>
-    </HeaderWrapper>
-  )
+class Header extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  getSearchListArea(show) {
+    if (show) {
+      const {searchList, page, onMouseEnter, onMouseLeave, changePage} = this.props
+      const pageList = [];
+      const newList = searchList.toJS()
+      // console.log('getSearchListArea page', page)
+      for (let i = page * 10; i < (page + 1) * 10 && i < newList.length; i++) {
+        pageList.push(
+          <SearchInfoItem key={i}>{newList[i]}</SearchInfoItem>
+        )
+      }
+      return (
+        <SearchInfo onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+          <SearchInfoTitle>
+            热门搜索
+            <SearchInfoSwitch onClick={() => changePage(this.spinIcon)}>
+              <i ref={(icon) => {this.spinIcon = icon}} className='iconfont spin'>&#xe630;</i>
+              换一批
+            </SearchInfoSwitch>
+          </SearchInfoTitle>
+          <div>{pageList}</div>
+        </SearchInfo>
+      )
+    } else {
+      return null
+    }
+  }
+
+  render() {
+    // console.log('render')
+    return (
+      <HeaderWrapper>
+        <Logo/>
+        <Nav>
+          <NavItem className='left active'>首页</NavItem>
+          <NavItem className='left'>下载App</NavItem>
+          <SearchWrapper>
+            <CSSTransition
+              in={this.props.focused}
+              timeout={200}
+              classNames='slide'>
+              <NavSearch className={this.props.focused ? 'focused' : ''}
+                onFocus={() => {this.props.onInputFocus(this.props.searchList)}}
+                onBlur={this.props.onInputBlur}/>
+            </CSSTransition>            
+            <i className={this.props.focused ? 'focused iconfont zoom' : 'iconfont zoom'}>&#xe6cf;</i>
+            {this.getSearchListArea(this.props.focused || this.props.mouseIn)}
+          </SearchWrapper>          
+          <NavItem className='right'>登录</NavItem>
+          <NavItem className='right'>
+            <i className="iconfont">&#xe636;</i>
+          </NavItem>
+        </Nav>
+        <Addition>
+          <Button className='write'>
+            <i className="iconfont">&#xe615;</i>写文章
+          </Button>
+          <Button className='reg'>注册</Button>
+        </Addition>
+      </HeaderWrapper>
+    )
+  }
 }
-// class Header extends Component {
-//   render() {
-//     return (
-//       <HeaderWrapper>
-//         <Logo/>
-//         <Nav>
-//           <NavItem className='left active'>首页</NavItem>
-//           <NavItem className='left'>下载App</NavItem>
-//           <SearchWrapper>
-//             <CSSTransition
-//               in={this.props.focused}
-//               timeout={200}
-//               classNames='slide'>
-//               <NavSearch className={this.props.focused ? 'focused' : ''}
-//                 onFocus={this.props.onInputFocus}
-//                 onBlur={this.props.onInputBlur}/>
-//             </CSSTransition>            
-//             <i className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe6cf;</i>
-//           </SearchWrapper>          
-//           <NavItem className='right'>登录</NavItem>
-//           <NavItem className='right'>
-//             <i className="iconfont">&#xe636;</i>
-//           </NavItem>
-//         </Nav>
-//         <Addition>
-//           <Button className='write'>
-//             <i className="iconfont">&#xe615;</i>写文章
-//           </Button>
-//           <Button className='reg'>注册</Button>
-//         </Addition>
-//       </HeaderWrapper>
-//     )
-//   }
-// }
 
 const mapStateToProps = (state) => {
   return {
-    focused: state.header.focused
+    focused: state.getIn(['header', 'focused']),
+    searchList: state.getIn(['header', 'searchList']),
+    page: state.getIn(['header', 'page']),
+    mouseIn: state.getIn(['header', 'mouseIn'])
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onInputFocus() {
-      const action = {
-        type: actionTypes.SEARCH_INPUT_FOCUS
-      }
-      dispatch(action)
+    onInputFocus(searchList) {
+      // console.log('onInputFocus', searchList)
+      (searchList.size === 0) && dispatch(actionCreators.getSearchList())
+      dispatch(actionCreators.searchInputFocus())
     },
     onInputBlur() {
-      const action = {
-        type: actionTypes.SEARCH_INPUT_BLUR
+      // console.log('onInputBlur')
+      dispatch(actionCreators.searchInputBlur())
+    },
+    onMouseEnter() {
+      console.log('onMouseEnter')
+      dispatch(actionCreators.mouseEnter())
+    },
+    onMouseLeave() {
+      console.log('onMouseLeave')
+      dispatch(actionCreators.mouseLeave())
+    },
+    changePage(spin) {
+      let angle = spin.style.transform.replace(/[^0-9]/ig, '')
+      if (angle) {
+        angle = parseInt(angle, 10)
+      } else {
+        angle = 0
       }
-      dispatch(action)
-    }
+      // console.log('changePage angle', angle)
+      spin.style.transform = 'rotate(' + (angle+360) + 'deg)'
+      dispatch(actionCreators.changePage())
+    }    
   }
 }
 

@@ -3,6 +3,9 @@ import { createGlobalStyle } from 'styled-components'
 import Header from './common/header'
 import store from './store'
 import { Provider } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import Home from './pages/home'
+import Detail from './pages/detail'
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -55,8 +58,14 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Fragment>
-          <Header/>
           <GlobalStyle/>
+          <Header/>
+          <Router>
+            <div>
+              <Route exact path='/' component={Home}></Route>
+              <Route exact path='/detail' component={Detail}></Route>
+            </div>            
+          </Router>          
         </Fragment>
       </Provider>      
     );
