@@ -1,10 +1,8 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import {TopicWrapper, TopicItem} from '../style'
-import { CSSTransition } from 'react-transition-group'
 import { connect } from 'react-redux'
-import { actionCreators } from '../store'
 
-class Topic extends Component {
+class Topic extends PureComponent {
   render() {
     // console.log(this.props)
     return (
@@ -13,7 +11,7 @@ class Topic extends Component {
             this.props.list.map((item) => {
               return (
                 <TopicItem key={item.get('id')}>
-                  <img 
+                  <img alt=''
                     className='topic-pic'
                     src={item.get('imgUrl')}>
                   </img>

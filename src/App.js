@@ -1,11 +1,13 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { createGlobalStyle } from 'styled-components'
 import Header from './common/header'
 import store from './store'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Home from './pages/home'
-import Detail from './pages/detail'
+import Detail from './pages/detail/loadable'
+import Login from './pages/login'
+import Write from './pages/write'
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -53,19 +55,21 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-class App extends Component {
+class App extends PureComponent {
   render() {
     return (
       <Provider store={store}>
         <Fragment>
           <GlobalStyle/>
-          <Header/>
           <Router>
             <div>
+              <Header/>
               <Route exact path='/' component={Home}></Route>
-              <Route exact path='/detail' component={Detail}></Route>
-            </div>            
-          </Router>          
+              <Route exact path='/login' component={Login}></Route>
+              <Route exact path='/detail/:id' component={Detail}></Route>
+              <Route exact path='/write' component={Write}></Route>
+            </div>
+          </Router>
         </Fragment>
       </Provider>      
     );

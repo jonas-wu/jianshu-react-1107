@@ -1,0 +1,1 @@
+export const CHANGE_DETAIL_DATA = 'header/CHANGE_DETAIL_DATA'

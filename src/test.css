@@ -1,12 +1,17 @@
-.container {
-  border: 1px solid #000;
-  overflow: hidden;
+body {
+  margin: 0;
+  padding: 0;
 }
 
-p{
-  float: left;
-  width: 100px;
-  height: 100px;
-  background: pink;
-  margin: 100px;
-}
+.mib_body { width: 600px; margin-left: auto; margin-right: auto; }
+.mib_x { margin-bottom: 10px; background-color: #fff; }
+.mib_list { padding: 20px; }
+.mib_resize { overflow: auto; resize: both; }
+.mib_vip { display: inline-block; width: 11px; height: 10px; margin-left: 1px; background: url(data:image/gif;base64,R0lGODlhCwAKAJEDAPyZCveDBuJmBP///yH5BAEAAAMALAAAAAALAAoAAAIdhD1zopgTXgMpsBdylVCPK2UCKI0j95hoRa0NVwAAOw==); }
+
+.mib_head_a { float: left; margin-right: 20px; }
+/* 下面这个是固定布局写法 */
+.mib_cell { display: table-cell; *display: inline-block; width: 2000px; *width: auto; }
+
+.mib_sms { line-height: 22px; padding-bottom: 6px; font-size: 14px; }
+.mib_select { width: 80px; padding: 5px; font-size: 100%; }

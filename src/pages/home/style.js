@@ -59,3 +59,64 @@ export const RecommendItem = styled.div`
   background: url(${(props) => props.imgUrl});
   background-size: contain;
 `
+
+export const NewsListWrapper = styled.div`
+  width: 100%;
+`
+
+export const NewsListItem = styled.div`
+  width: 100%;
+  // background: green;
+  margin: 20px 0;
+  overflow: hidden;
+  position:relative;
+  .news-title {
+    fontSize: 18px;
+    width: 70%;
+  }
+  .news-summary {
+    font-size: 13px;
+    color: #bbb;
+    margin-top: 10px;
+    width: 70%;
+  }
+  .news-img {
+    position:absolute;
+    top: 0;
+    right:0;
+    width: 125px;
+    height: 100px;
+    border-radius: 18px;
+    background-size: contain;
+  }
+`
+
+export const LoadMore = styled.div`
+  width: 100%;
+  background: gray;
+  margin-top: 20px;
+  border-radius: 35px;
+  border: 1px solid;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+`
+
+export const BackTop = styled.div`
+  display: block;
+  width: 60px;
+  // height: 60px;
+  // line-height: 60px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: fixed;
+  right: 100px;
+  bottom: 100px;
+  font-size:14px;
+  padding: 8px 8px;
+  cursor: pointer;
+`

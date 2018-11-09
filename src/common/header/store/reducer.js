@@ -1,6 +1,5 @@
 import { constants } from './index'
 import { fromJS } from 'immutable'
-import { stat } from 'fs';
 
 const defaultState = fromJS({
   focused: false,

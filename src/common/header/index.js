@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import { 
   HeaderWrapper, 
   Logo, 
@@ -16,12 +16,11 @@ import {
 import { CSSTransition } from 'react-transition-group'
 import { connect } from 'react-redux'
 import { actionCreators } from './store'
+import { actionCreators as loginActionCreators } from '../../pages/login/store'
 import './style.css'
+import { Link } from 'react-router-dom'
 
-class Header extends Component {
-  constructor(props) {
-    super(props)
-  }
+class Header extends PureComponent {
 
   getSearchListArea(show) {
     if (show) {
@@ -55,7 +54,9 @@ class Header extends Component {
     // console.log('render')
     return (
       <HeaderWrapper>
-        <Logo/>
+        <Link to='/'>
+          <Logo/>
+        </Link>        
         <Nav>
           <NavItem className='left active'>首页</NavItem>
           <NavItem className='left'>下载App</NavItem>
@@ -70,16 +71,24 @@ class Header extends Component {
             </CSSTransition>            
             <i className={this.props.focused ? 'focused iconfont zoom' : 'iconfont zoom'}>&#xe6cf;</i>
             {this.getSearchListArea(this.props.focused || this.props.mouseIn)}
-          </SearchWrapper>          
-          <NavItem className='right'>登录</NavItem>
+          </SearchWrapper>
+          {
+            this.props.login ? 
+              <NavItem className='right' onClick={this.props.logout}>退出</NavItem> : 
+              <Link to='/login'>
+                <NavItem className='right'>登录</NavItem>
+              </Link>
+          }
           <NavItem className='right'>
             <i className="iconfont">&#xe636;</i>
           </NavItem>
         </Nav>
         <Addition>
-          <Button className='write'>
-            <i className="iconfont">&#xe615;</i>写文章
-          </Button>
+          <Link to='/write'>
+            <Button className='write'>
+              <i className="iconfont">&#xe615;</i>写文章
+            </Button>
+          </Link>          
           <Button className='reg'>注册</Button>
         </Addition>
       </HeaderWrapper>
@@ -92,7 +101,8 @@ const mapStateToProps = (state) => {
     focused: state.getIn(['header', 'focused']),
     searchList: state.getIn(['header', 'searchList']),
     page: state.getIn(['header', 'page']),
-    mouseIn: state.getIn(['header', 'mouseIn'])
+    mouseIn: state.getIn(['header', 'mouseIn']),
+    login: state.getIn(['login', 'login'])
   }
 }
 
@@ -125,7 +135,11 @@ const mapDispatchToProps = (dispatch) => {
       // console.log('changePage angle', angle)
       spin.style.transform = 'rotate(' + (angle+360) + 'deg)'
       dispatch(actionCreators.changePage())
-    }    
+    },
+    logout() {
+      console.log('logout')
+      dispatch(loginActionCreators.logout())
+    },   
   }
 }
 
